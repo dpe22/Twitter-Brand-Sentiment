@@ -1,51 +1,74 @@
+#This version of code modified by: dpe22
+
+#Original Code from https://github.com/twitterdev/Twitter-API-v2-sample-code/blob/main/Recent-Search/recent_search.py\
+#Original Code Copyright 2020 @TwitterDev
+
+  # Licensed under the Apache License, Version 2.0 (the "License");
+  # you may not use this file except in compliance with the License.
+   #You may obtain a copy of the License at
+
+    #   http://www.apache.org/licenses/LICENSE-2.0
+
+  # Unless required by applicable law or agreed to in writing, software
+   #distributed under the License is distributed on an "AS IS" BASIS,
+   #WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  # See the License for the specific language governing permissions and
+   #limitations under the License.
+
 import requests
-import pandas as pd
+import os
 import json
-import ast
-import yaml
 
-def create_twitter_url():
-    handle = "dpe22"
-    max_results = 10
-    mrf = "max_results={}".format(max_results)
-    q = "query=from:{}".format(handle)
-    url = "https://api.twitter.com/2/tweets/search/recent?{}&{}".format(
-        mrf, q
-    )
-    return url
+# To set your environment variables in your terminal run the following line:
+# export 'BEARER_TOKEN'='<your_bearer_token>'
 
-def process_yaml():
-    with open("config.yaml") as file:
-        return yaml.safe_load(file)
+bearer_token = os.environ.get("BEARER_TOKEN")
+search_url = "https://api.twitter.com/2/tweets/search/recent"
 
-def create_bearer_token(data):
-    return data["search_tweets_api"]["bearer_token"]
+print()
+print('Please enter the name of the company you want to evaluate: ')
+COMPANY = input()
+print()
+print('How do you want to evaluate %s?' %(COMPANY))
+print('    [1] Brand Sentiment')
+print('    [2] Employee Sentiment')
 
-def twitter_auth_and_connect(bearer_token, url):
-    headers = {"Authorization": "Bearer {}".format(bearer_token)}
-    response = requests.request("GET", url, headers=headers)
+# Optional params: start_time,end_time,since_id,until_id,max_results,next_token,
+# expansions,tweet.fields,media.fields,poll.fields,place.fields,user.fields
+while True:
+    CHOICE = input()
+    if CHOICE == "2":
+        query_params = {'query' : 'lang: en -is:reply -is:retweet "Working at %s" OR "Working for %s" -"$"' %(COMPANY, COMPANY), 'max_results': 10}
+        break
+    elif CHOICE == "1":
+        query_params = {'query' : 'lang: en -is:reply -is:retweet %s -"$"' %(COMPANY), 'max_results': 10}
+        break
+    else:
+        print()
+        print("ERROR: Invalid Choice. Please choose option 1 or option 2.") 
+        print('    [1] Brand Sentiment')
+        print('    [2] Employee Sentiment')
+
+def bearer_oauth(r):
+    """
+    Method required by bearer token authentication.
+    """
+
+    r.headers["Authorization"] = f"Bearer {bearer_token}"
+    r.headers["User-Agent"] = "v2RecentSearchPython"
+    return r
+
+def connect_to_endpoint(url, params):
+    response = requests.get(url, auth=bearer_oauth, params=params)
+    print(response.status_code)
+    if response.status_code != 200:
+        raise Exception(response.status_code, response.text)
     return response.json()
 
-def lang_data_shape(res_json):
-    data_only = res_json["data"]
-    doc_start = '"documents": {}'.format(data_only)
-    str_json = "{" + doc_start + "}"
-    dump_doc = json.dumps(str_json)
-    doc = json.loads(dump_doc)
-    return ast.literal_eval(doc)
-
-def connect_to_google(data):
-    google_url = "https://week.cognitiveservices.azure.com/"
-    language_api_url = "{}text/analytics/v2.1/languages".format(azure_url)
-    sentiment_url = "{}text/analytics/v2.1/sentiment".format(azure_url)
-    subscription_key = data["google"]["subscription_key"]
-    return language_api_url, sentiment_url, subscription_key
 
 def main():
-    url = create_twitter_url()
-    data = process_yaml()
-    bearer_token = create_bearer_token(data)
-    res_json = twitter_auth_and_connect(bearer_token, url)
+    json_response = connect_to_endpoint(search_url, query_params)
+    print(json.dumps(json_response, indent=4, sort_keys=True))
 
 
 if __name__ == "__main__":
