@@ -18,6 +18,7 @@
 import requests
 import os
 import json
+import sys
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
@@ -41,7 +42,7 @@ while True:
         query_params = {'query' : 'lang: en -is:reply -is:retweet "Working at %s" OR "Working for %s" -"$"' %(COMPANY, COMPANY), 'max_results': 10}
         break
     elif CHOICE == "1":
-        query_params = {'query' : 'lang: en -is:reply -is:retweet %s -"$"' %(COMPANY), 'max_results': 10}
+        query_params = {'query' : 'lang: en -is:reply -is:retweet %s -"$"' %(COMPANY), 'max_results': 100}
         break
     else:
         print()
@@ -65,11 +66,22 @@ def connect_to_endpoint(url, params):
         raise Exception(response.status_code, response.text)
     return response.json()
 
+##uprint function defined by Jelle Fresen on May 1 2015 on stockoverflow.com, used to resolve a character mapping issue
+def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+    enc = file.encoding
+    if enc == 'UTF-8':
+        print(*objects, sep=sep, end=end, file=file)
+    else:
+        f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
+        print(*map(f, objects), sep=sep, end=end, file=file)
 
 def main():
     json_response = connect_to_endpoint(search_url, query_params)
-    print(json.dumps(json_response, indent=4, sort_keys=True))
-
+    encoded_tweets = json.dumps(json_response, indent=4, ensure_ascii = False, sort_keys=True)
+    decoded_tweets = json.loads(encoded_tweets)
+    d1 = [item['text'] for item in decoded_tweets['data']]
+    with open('tweets_to_analyze.txt','w') as f:
+        uprint(*d1, sep = ". \n", file=f)
 
 if __name__ == "__main__":
     main()
