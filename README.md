@@ -9,4 +9,4 @@ Originally conceptualized as a way for brands to track social media campaign per
   3. The Employer: Seeking to create value for employees, customers, and stakeholders, while protecting and building brand equity, the employer uses this product to evaluate and improve company culture and reputation. 
 
 # Important Caveats
-Only the employee function is currently finished. Sample results are documented in this repo for Amazon, Apple, Microsoft, and Google. 
+Brand Results are less reliable due to generic classification, e.g. Apple tweet collection samples may include irrelevant tweets about fruit, or paid advertisements.
