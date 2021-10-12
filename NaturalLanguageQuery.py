@@ -13,10 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#Use the following code to install the virtual environment with python >=3.6:
+#pip install virtualenv
+#virtualenv <your-env>
+#<your-env>\Scripts\activate
+#<your-env>\Scripts\pip.exe install google-cloud-language
+
+import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\darre\Desktop\key2.json"
+
+
 
 import argparse
 
 from google.cloud import language_v1
+
+
 
 def print_result(annotations):
     score = annotations.document_sentiment.score
@@ -25,7 +37,7 @@ def print_result(annotations):
     for index, sentence in enumerate(annotations.sentences):
         sentence_sentiment = sentence.sentiment.score
         print(
-            "Tweet {} has a sentiment score of {}".format(index, sentence_sentiment)
+            "Sentence {} has a sentiment score of {}".format(index, sentence_sentiment)
         )
 
     print(
@@ -33,11 +45,14 @@ def print_result(annotations):
     )
     return 0
 
-def analyze(tweets_to_analyze):
-    """Run a sentiment analysis request on text within a passed filename."""
+
+
+
+def analyze(tweet_filename):
+    #"""Run a sentiment analysis request on text within a passed filename."""
     client = language_v1.LanguageServiceClient()
 
-    with open(tweets_to_analyze, "r") as review_file:
+    with open(tweet_filename, "r") as review_file:
         # Instantiates a plain text document.
         content = review_file.read()
 
@@ -55,9 +70,10 @@ if __name__ == "__main__":
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument(
-        "tweets_to_analyze",
-        help="The filename of the tweets you'd like to analyze.",
+        "tweet_filename",
+        help="The filename of the movie review you'd like to analyze.",
     )
     args = parser.parse_args()
 
-    analyze(args.tweets_to_analyze)
+    analyze(args.tweet_filename)
+
