@@ -7,3 +7,6 @@ Originally conceptualized as a way for brands to track social media campaign per
   1. The Candidate: Seeking employment, the candidate turns to Twitter to see real-time sentiment of current employees, drawing inferences about working conditions and issues. 
   2. The Employee: Seeking validation, the employee uses this product as a means of justifying change to management using real-time data.
   3. The Employer: Seeking to create value for employees, customers, and stakeholders, while protecting and building brand equity, the employer uses this product to evaluate and improve company culture and reputation. 
+
+# Important Caveats
+Only the employee function is currently finished. Sample results are documented in this repo for Amazon, Apple, Microsoft, and Google. 
