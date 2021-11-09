@@ -8,5 +8,12 @@ Originally conceptualized as a way for brands to track social media campaign per
   2. The Employee: Seeking validation, the employee uses this product as a means of justifying change to management using real-time data.
   3. The Employer: Seeking to create value for employees, customers, and stakeholders, while protecting and building brand equity, the employer uses this product to evaluate and improve company culture and reputation. 
 
+# Unit Tests (to be built)
+- What if the user tries to select a function outside the range {brand, employee}? 
+- What if the user enters multiple company names? 
+- What if the user doesn't use UTF-8 encoded characters to enter the company name? How does Twitter API endpoint respond? How does program respond? 
+- What if the user enters a string longer than 280 character tweet limit?
+- What if the user enters a gibberish string?
+
 # Important Caveats
 Brand Results are less reliable due to generic classification, e.g. Apple tweet collection samples may include irrelevant tweets about fruit, or paid advertisements.
