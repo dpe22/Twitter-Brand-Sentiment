@@ -1,5 +1,5 @@
 # Twitter-Brand-Sentiment
-## To Start: Run companySentiment.py, or run the query modules sequentially to generate results. 
+## To Start: Run companySentiment.py, or run the query modules. 
 These python programs utilize Twitter Search API and Google Cloud Natural Language API. Recent tweets about a company of your choice are aggregated into a text file and fed into Google's Natural Language AI for sentiment analysis, where they receive quantitative scores that are returned to the user. 
 
 Originally conceptualized as a way for brands to track social media campaign performance, this project evolved due to Twitter Search API constraints: it's not possible to filter out paid content from the search without a higher tier plan. That makes a general search for a brand name mostly ineffective for sentiment analysis because it returns mostly paid product ads and content. So instead, the program was redirected using more specific search language "working for COMPANY" or "working at COMPANY". It's not a broad net, and could certainly be expanded, but it is sufficient to demonstrate proof of concept. 
